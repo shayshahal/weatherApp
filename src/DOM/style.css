@@ -9,6 +9,12 @@ body,html
     height: 100vh;
     width: 100vw;
 }
+button{
+    border: none;
+    background-color: inherit;
+    font: inherit;
+    font-family: inherit;
+}
 #container
 {
     height: 100%;
@@ -27,11 +33,19 @@ form
     border-radius: 30px;
     width: 100%;
     height: 7vh;
+    font-size: 2em;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-content: stretch;
-    font-size: 2em;
+}
+#search-container
+{
+    position: relative;
+    display: inline-block;
+    border-radius: inherit;
+    height: 100%;
+    width: 96%;
 }
 input:focus,button:focus
 {
@@ -42,22 +56,45 @@ input
 {
     border: none;
     border-radius: inherit;
+    background-color: transparent;
     font-size: inherit;
-    padding: 1vw;
-    width: 96%;
+    padding: 0vh 1vw;
+    width: 100%;
+    height: 100%;
 }
-button
+#suggest
 {
-    border: none;
+    position: absolute;
+    z-index: 99;
+    top: 101%;
+    left: 2%;
+    right: 0;
+    background-color: white;
+}
+#suggest button
+{
+    padding: .5vh .5vw;
+
+}
+#submit
+{
     border-radius: inherit;
     width: 4%;
     cursor: pointer;
     background: url('./assets/search.svg');
     background-size: contain;
+    background-position: center center;
     background-repeat: no-repeat;
     transition: transform .2s ease;
 }
-button:hover
+#submit:hover
 {
     transform: scale(1.1);
+}
+#content
+{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
