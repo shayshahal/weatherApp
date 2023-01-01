@@ -10,6 +10,10 @@
     "dev": "webpack serve --config webpack.dev.js",
     "prod": "webpack --config webpack.prod.js"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shayshahal/toDo.git"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
