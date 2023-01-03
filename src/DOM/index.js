@@ -7,7 +7,7 @@ const suggests = document.querySelectorAll('.suggest');
 const forms = document.querySelectorAll('form')
 let country;
 let loc = [null,null];
-
+let fahrenheit = false;
 searches[0].addEventListener('input', debounce(fetchCountryList,1000));
 
 async function fetchCountryList()
@@ -68,7 +68,10 @@ async function presentWeather()
     clearSuggest(1)
     const weather = document.getElementById('weather');
     const res = await getWeather(loc[0], loc[1]);
-    weather.textContent = res.main.temp;
+    let temp = ~~(res.main.temp - 273.15)
+    if(fahrenheit)
+        temp = ~~(temp*1.8)+32;
+    weather.textContent = res.sys.country + "," + res.name +  ","+temp;
 }
 
 searches[1].addEventListener('input', debounce(async()=>{
