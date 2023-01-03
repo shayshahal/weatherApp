@@ -84,6 +84,10 @@ searches[1].addEventListener('input', debounce(async()=>{
 
 forms.forEach(f=> f.addEventListener('submit', (e)=>e.preventDefault()));
 
+searches.forEach((f,i)=> f.addEventListener('focusout', ()=>{
+    clearSuggest(i);
+    }));
+
 try{
     presentWeather();
 }
