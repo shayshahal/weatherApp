@@ -2,7 +2,7 @@
     font-family: 'MyFont';
     src: url('./assets/Merriweather-Regular.ttf') format('trueType');
     font-weight: 600;
-    font-size: 20px;
+    font-size: 20vmin;
 }
 *
 {
@@ -30,7 +30,6 @@ button{
     display: flex;
     flex-direction: column;
     gap: 1vh;
-    background: url('./assets/bg.jpg');
     background-size:cover;
     background-position: center center;
     background-repeat: no-repeat;
