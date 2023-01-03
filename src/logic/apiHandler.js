@@ -1,7 +1,8 @@
 const keys = {
     'weatherApi' : '519901a9b0492b434e86015cdf5f4227',
     'abstractapi': '1b07984699ad4daba476457930a2222f',
-    'X-RapidAPI-Key': 'b40340b672msh04e2a94b030e6fep10b861jsn9222dd58e2f3'
+    'rapid': 'b40340b672msh04e2a94b030e6fep10b861jsn9222dd58e2f3',
+    'giphy': 'Kg2pRIl3BZ584x5yIbKyX5P2y5D54DMe'
 };
 export async function getWeather(lat, lon)
 {
@@ -29,7 +30,7 @@ export async function getCities(input, country)
     const options = {
         method: 'GET',
         headers: {
-            'X-RapidAPI-Key': keys['X-RapidAPI-Key'],
+            'X-RapidAPI-Key': keys['rapid'],
             'X-RapidAPI-Host': 'wft-geo-db.p.rapidapi.com'
         }
     };
@@ -43,7 +44,7 @@ export async function getCountries(input)
     const options = {
         method: 'GET',
         headers: {
-            'X-RapidAPI-Key': keys['X-RapidAPI-Key'],
+            'X-RapidAPI-Key': keys['rapid'],
             'X-RapidAPI-Host': 'wft-geo-db.p.rapidapi.com'
         }
     };
@@ -51,4 +52,12 @@ export async function getCountries(input)
     const data = await response.json();
     console.log(data)
     return data.data;
+}
+export async function getGiphy(input)
+{
+    const response = await fetch(`api.giphy.com/v1/gifs/search?q=${input}&api_key=${keys['giphy']}&limit=1`);
+    console.log(response)
+    const data = await response.json();
+    console.log(data);
+    return data[0].images.original.url;
 }
