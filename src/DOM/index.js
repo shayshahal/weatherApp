@@ -59,7 +59,7 @@ function initCitySearch()
     clearSuggest(0);
     submits[0].disabled = true;
     searches[0].disabled = true;
-    forms[1].style.visibility = 'visible';
+    forms[1].style.display = 'flex';
     searches[1].focus();
     submits[1].addEventListener('click', presentWeather)
 }
