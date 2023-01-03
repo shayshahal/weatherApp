@@ -1,4 +1,4 @@
-import { getCities, getCountries, getWeather } from "../logic/apiHandler";
+import { getCities, getCountries, getWeather, getGiphy} from "../logic/apiHandler";
 import './style.css'
 
 const submits = document.querySelectorAll('.submit');
