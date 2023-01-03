@@ -6,15 +6,23 @@
     </head>
     <body>
         <div id="container">
-            <form autocomplete="off">
-                <div id="search-container">
-                    <input type="search" placeholder="United Kingdom, London... ">
-                    <div id="suggest"></div>
+            <form id="form1" autocomplete="off">
+                <div class="search-container">
+                    <input id="country" type="search" placeholder="Enter a Country..." required>
+                    <div class="suggest"></div>
                 </div>
-                <button id="submit"></button>
+                <button type="button" class="submit"></button>
+            </form>
+            <form id="form2" autocomplete="off">
+                <div class="search-container">
+                    <input id="city" type="search" placeholder="Enter a City..." required>
+                    <div class="suggest"></div>
+                </div>
+                <button type="button" class="submit"></button>
             </form>
             <div id="content">
-
+                <span id="weather"></span>
+                <img>
             </div>
         </div>
     </body>
