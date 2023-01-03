@@ -70,8 +70,11 @@ async function presentWeather()
     const res = await getWeather(loc[0], loc[1]);
     let temp = ~~(res.main.temp - 273.15)
     if(fahrenheit)
-        temp = ~~(temp*1.8)+32;
-    weather.textContent = res.sys.country + "," + res.name +  ","+temp;
+    const img = document.querySelector('img');
+    img.src = `http://openweathermap.org/img/wn/${res.weather[0].icon}@2x.png`
+    const container = document.getElementById('container');
+    const gif = await getGiphy(res.weather[0].main);
+    container.style.backgroundImage = `url(${gif})`;
 }
 
 searches[1].addEventListener('input', debounce(async()=>{
