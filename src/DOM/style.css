@@ -19,9 +19,9 @@ button{
 {
     height: 100%;
     width: 100%;
-    background-color: rgb(105, 24, 24);
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 1fr 8fr;
     padding: 1vh 1vw;
     font-size: 20px;
 }
@@ -36,10 +36,13 @@ form
     font-size: 2em;
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
-    align-content: stretch;
+
 }
-#search-container
+#form2
+{
+    visibility: hidden;
+}
+.search-container
 {
     position: relative;
     display: inline-block;
@@ -62,21 +65,25 @@ input
     width: 100%;
     height: 100%;
 }
-#suggest
+.suggest
 {
     position: absolute;
     z-index: 99;
-    top: 101%;
+    top: 100%;
     left: 2%;
     right: 0;
     background-color: white;
+    max-height: 25vh;
+    overflow:auto;
+    display: flex;
+    flex-direction: column;
 }
-#suggest button
+.suggest button
 {
     padding: .5vh .5vw;
 
 }
-#submit
+.submit
 {
     border-radius: inherit;
     width: 4%;
@@ -87,13 +94,18 @@ input
     background-repeat: no-repeat;
     transition: transform .2s ease;
 }
-#submit:hover
+.submit:enabled:hover
 {
     transform: scale(1.1);
 }
+
 #content
 {
     display: flex;
+    height: 100%;
+    width: 100%;
+    justify-self: center;
+    font-size: 5rem;
     flex-direction: column;
     justify-content: center;
     align-items: center;

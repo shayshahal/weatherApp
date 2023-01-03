@@ -1,31 +1,54 @@
-let keys = {
-    'X-RapidAPI-Key': 'b40340b672msh04e2a94b030e6fep10b861jsn9222dd58e2f3',
+const keys = {
     'weatherApi' : '519901a9b0492b434e86015cdf5f4227',
-    'abstractapi': '1b07984699ad4daba476457930a2222f'
-};
-let options = {
-	method: 'GET',
+    'abstractapi': '1b07984699ad4daba476457930a2222f',
+    'X-RapidAPI-Key': 'b40340b672msh04e2a94b030e6fep10b861jsn9222dd58e2f3'
 };
 export async function getWeather(lat, lon)
 {
-    options.headers = keys['weatherApi'];
-    const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${keys['weatherApi']}`);
+    if(!lat && !lon)
+    {
+        const location = await getVisitorLocation();
+        lat = location.latitude;
+        lon = location.longitude;
+    }
+    console.log(lat, lon)
+    const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat.toFixed(2)}&lon=${lon.toFixed(2)}&appid=${keys['weatherApi']}`);
     const data = await response.json();
     console.log(data)
     return data;
 }
 export async function getVisitorLocation()
 {
-    options.headers = keys['abstractapi'];
-    const response = await fetch(`https://ipgeolocation.abstractapi.com/v1/}`, options);
+    const response = await fetch(`https://ipgeolocation.abstractapi.com/v1/?api_key=${keys['abstractapi']}`);
     const data = await response.json();
     console.log(data)
     return data;
 }
-export async function getCitySuggestions(input)
+export async function getCities(input, country)
 {
-    const response = await fetch(`https://restcountries.com/v3.1/name/${input}`, options);
-    const list = await response.json();
-    console.log(list)
-    return list;
+    const options = {
+        method: 'GET',
+        headers: {
+            'X-RapidAPI-Key': keys['X-RapidAPI-Key'],
+            'X-RapidAPI-Host': 'wft-geo-db.p.rapidapi.com'
+        }
+    };
+    const response = await fetch(`https://wft-geo-db.p.rapidapi.com/v1/geo/cities?limit=5&countryIds=${country}&namePrefix=${input}`, options);
+    const data = await response.json();
+    console.log(data)
+    return data.data;
+}
+export async function getCountries(input)
+{
+    const options = {
+        method: 'GET',
+        headers: {
+            'X-RapidAPI-Key': keys['X-RapidAPI-Key'],
+            'X-RapidAPI-Host': 'wft-geo-db.p.rapidapi.com'
+        }
+    };
+    const response = await fetch(`https://wft-geo-db.p.rapidapi.com/v1/geo/countries?limit=5&namePrefix=${input}`, options);
+    const data = await response.json();
+    console.log(data)
+    return data.data;
 }

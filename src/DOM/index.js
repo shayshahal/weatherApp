@@ -1,61 +1,90 @@
+import { getCities, getCountries, getWeather } from "../logic/apiHandler";
 import './style.css'
-import {getCitySuggestions, getVisitorLocation, getWeather} from '../logic/apiHandler.js'
 
-const search = document.querySelector('input');
-const suggest = document.getElementById('suggest');
-const content = document.getElementById('content');
-let fahrenheit = false;
+const submits = document.querySelectorAll('.submit');
+const searches = document.querySelectorAll('input')
+const suggests = document.querySelectorAll('.suggest');
+const forms = document.querySelectorAll('form')
+let country;
+let loc = [null,null];
 
-search.addEventListener('change',()=>
+searches[0].addEventListener('input', debounce(fetchCountryList,1000));
+
+async function fetchCountryList()
 {
-    while (suggest.firstChild) {
-        suggest.removeChild(suggest.firstChild);
-    }
-    suggest.textContent = '';
-
-    try
-    {
-        getCitySuggestions(search.value).then((countries)=> 
-        {
-            if(countries.length === 0)
-                throw new Error('Could not find country');
-            for(const c of countries)
-            {
-                const span = document.createElement('span');
-                span.textContent = c.name.common;
-                span.addEventListener('click', (e)=> 
-                {
-                    search.value = e.target.textContent;
-                })
-                suggest.appendChild(span);
-            }
-        })
-    }
-    catch
-    {
-        suggest.textContent = error;
-    }
-} )
-
-function presentUserWeather()
-{
-    try 
-    {
-        getVisitorLocation().catch((error) => {throw new Error(error)})
-        .then((data)=>
-        {
-            getWeather(data.latitude, data.longitude).catch((error) => {throw new Error(error)})
-                .then((weather)=> {
-                    const temper = ~~weather.main.temp-273;
-                    if(fahrenheit)
-                        temper = ~~(temper*1.8)+32
-                    content.textContent = `${data.country}, ${data.city}, ${temper}`
-            })
-        })
-    }
-    catch
-    {
-        content.textContent = error;
-    }
+    const list = await getCountries(searches[0].value)
+    console.log(list)
+    clearSuggest(0);
+    list.forEach(x=>addSuggestion(0,x.name, x.code));
+    if(list.length === 1) country = list[0].code;
 }
-//presentUserWeather()
+function debounce(func, waitFor) {
+    let timeout;
+    return (...args) => new Promise(resolve => {
+        if (timeout) {
+            clearTimeout(timeout);
+        }
+        timeout = setTimeout(() => resolve(func(...args)), waitFor);
+    });
+}
+function addSuggestion(i, name, data)
+{
+    const btn = document.createElement('button');
+    console.log(name)
+    btn.textContent = name;
+    btn.type = 'button';
+    suggests[i].appendChild(btn);
+    btn.addEventListener('click', (e)=> {
+        searches[i].value = e.target.textContent;
+        clearSuggest(i)
+        if(i === 0)
+            country = data;
+        else
+            loc = data;
+    })
+}
+
+function clearSuggest(i)
+{
+    while (suggests[i].firstChild) {
+        suggests[i].removeChild(suggests[i].firstChild);
+    }
+    suggests[i].textContent = '';
+}
+
+submits[0].addEventListener('click', initCitySearch)
+
+function initCitySearch()
+{
+    clearSuggest(0);
+    submits[0].disabled = true;
+    searches[0].disabled = true;
+    forms[1].style.visibility = 'visible';
+    searches[1].focus();
+    submits[1].addEventListener('click', presentWeather)
+}
+async function presentWeather()
+{
+    clearSuggest(1)
+    const weather = document.getElementById('weather');
+    const res = await getWeather(loc[0], loc[1]);
+    weather.textContent = res.main.temp;
+}
+
+searches[1].addEventListener('input', debounce(async()=>{
+    const list = await getCities(searches[1].value, country); 
+    console.log(list)
+    clearSuggest(1);
+    list.forEach(x=>addSuggestion(1,x.name, [x.latitude, x.longitude]));
+    if(list.length === 1) loc = [list[0].latitude,list[0].longitude];
+}, 1000));
+
+forms.forEach(f=> f.addEventListener('submit', (e)=>e.preventDefault()));
+
+try{
+    presentWeather();
+}
+catch(error)
+{
+    console.error(error);
+}
