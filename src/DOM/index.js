@@ -1,75 +1,49 @@
 import { getWeather} from "../logic/apiHandler";
 import './style.css'
 
-const submit = document.querySelector('#submit');
+const submit = document.getElementById('submit');
 const search = document.querySelector('input')
-const suggest = document.querySelector('#suggest');
 const form = document.querySelector('form')
-let fahrenheit = false;
-
-function addSuggestion(name, data)
-{
-    const btn = document.createElement('button');
-    console.log(name)
-    btn.textContent = name;
-    btn.type = 'button';
-    btn.classList.add('btnsgst');
-    suggest.appendChild(btn);
-    btn.addEventListener('mousedown', (e)=> {
-        search.value = e.target.textContent;
-        clearSuggest()
-        submit.click();
-    })
-}
-
-function clearSuggest()
-{
-    while (suggest.firstChild) {
-        suggest.removeChild(suggest.firstChild);
-    }
-    suggest.textContent = '';
-}
-submit.addEventListener('click', presentWeather)
-async function presentWeather()
-{
-    clearSuggest()
-    const countryText = document.getElementById('countryText');
-    const cityText = document.getElementById('cityText');
-    const weather = document.getElementById('temp')
-    try{
-        const res = await getWeather(search.value);
-        let temp = ~~(res.main.temp - 273.15) + '℃';
-        if(fahrenheit)
-            temp = ~~(temp*1.8)+32 + '℉';
-        countryText.textContent = res.sys.country;
-        cityText.textContent = res.name;
-        weather.textContent = temp;
-        const img = document.querySelector('img');
-        img.src = `http://openweathermap.org/img/wn/${res.weather[0].icon}@2x.png`
-    }
-    catch
-    {
-        weather.textContent='';
-        cityText.textContent = ''
-        countryText.textContent = 'Couldn\'t get weather';
-    }
-}
-
-form.addEventListener('submit', (e)=>e.preventDefault());
-
-form.addEventListener('focusin', ()=>
-{
-    form.classList.add('scale')
-})
-form.addEventListener('focusout', ()=>{
-    clearSuggest();
-    form.classList.remove('scale');
-    });
-
+const location = document.getElementById('location');
+const tempText = document.getElementById('tempText')
+const img = document.querySelector('img');
 const swtch = document.getElementById('switch');
-swtch.addEventListener('change', ()=>
+let temp = {true: null, false: null};
+let isCelsius = true;
+async function presentWeather(e = null)
 {
-    fahrenheit = swtch.checked;
+    if(e)
+        e.preventDefault()
+    try
+    {
+        const res = await getWeather(search.value);
+        if(res.cod === '404')
+            throw res.message;
+        location.textContent = res.sys.country + ', ' + res.name;
+        calcTemp(res.main.temp);
+        tempText.textContent = temp[isCelsius];
+        img.src = `http://openweathermap.org/img/wn/${res.weather[0].icon}@2x.png`;
+    }
+    catch(error)
+    {
+        tempText.textContent = '';
+        location.textContent = error;
+        img.src = ''
+    }
+}
+function calcTemp(num)
+{
+    temp.true = ~~(num - 273.15) + '℃';
+    temp.false = ~~((num - 273.15)*1.8)+32 + '℉';
+    console.log(temp)
+}
+form.addEventListener('submit', presentWeather);
+
+form.addEventListener('focusin', ()=>form.classList.add('scale'))
+form.addEventListener('focusout', ()=>form.classList.remove('scale'));
+swtch.addEventListener('change', ()=>{
+    isCelsius = !swtch.checked;
+    tempText.textContent = temp[isCelsius];
 });
 
-submit.click();
+presentWeather();

@@ -6,19 +6,15 @@
     </head>
     <body>
         <div id="container">
-            <form id="form1" autocomplete="off">
-                <div id="search-container">
-                    <input id="country" type="search" placeholder="Enter a Country\City..." required autofocus>
-                    <div id="suggest"></div>
-                </div>
-                <button type="button" id="submit"></button>
+            <form autocomplete="off">
+                <input id="country" type="search" placeholder="Enter a Country/City..." autofocus>
+                <button id="submit"></button>
             </form>
             <div id="content">
-                <span id="countryText"></span>
-                <span id="cityText"></span>
-                <div id="weather">
-                    <span id="temp"></span>    
-                    <img>
+                <div id="main">
+                    <div id="location"></div>
+                    <div id="weather"><span id="tempText"></span>
+                    <img></div>
                 </div>
             </div>
             <input type="checkbox" id="switch">
