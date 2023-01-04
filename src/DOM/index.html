@@ -7,26 +7,22 @@
     <body>
         <div id="container">
             <form id="form1" autocomplete="off">
-                <div class="search-container">
-                    <input id="country" type="search" placeholder="Enter a Country..." required autofocus>
-                    <div class="suggest"></div>
+                <div id="search-container">
+                    <input id="country" type="search" placeholder="Enter a Country\City..." required autofocus>
+                    <div id="suggest"></div>
                 </div>
-                <button type="button" class="submit"></button>
-            </form>
-            <form id="form2" autocomplete="off">
-                <div class="search-container">
-                    <input id="city" type="search" placeholder="Enter a City..." required>
-                    <div class="suggest"></div>
-                </div>
-                <button type="button" class="submit"></button>
+                <button type="button" id="submit"></button>
             </form>
             <div id="content">
-                <span id="location"></span>
+                <span id="countryText"></span>
+                <span id="cityText"></span>
                 <div id="weather">
                     <span id="temp"></span>    
                     <img>
                 </div>
             </div>
+            <input type="checkbox" id="switch">
+            <a href="https://github.com/shayshahal/weatherApp" target="_blank"></a>
         </div>
     </body>
 </html>
