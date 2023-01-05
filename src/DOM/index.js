@@ -1,14 +1,20 @@
 import { getWeather} from "../logic/apiHandler";
 import './style.css'
 import loader from './assets/spinner.svg'
+<<<<<<< HEAD
 
+=======
+>>>>>>> eb3a6d08435b497603df55827aa9e1325230362d
 const search = document.getElementById('search')
 const location = document.getElementById('location');
 const tempText = document.getElementById('tempText')
 const img = document.querySelector('img');
 const swtch = document.getElementById('switch');
 let temp = {true: null, false: null, isCelsius: true};
+<<<<<<< HEAD
 
+=======
+>>>>>>> eb3a6d08435b497603df55827aa9e1325230362d
 async function presentWeather()
 {
     try
