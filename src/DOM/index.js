@@ -1,8 +1,7 @@
 import { getWeather} from "../logic/apiHandler";
 import './style.css'
 
-const submit = document.getElementById('submit');
-const search = document.querySelector('input')
+const search = document.getElementById('search')
 const form = document.querySelector('form')
 const location = document.getElementById('location');
 const tempText = document.getElementById('tempText')
@@ -12,8 +11,6 @@ let temp = {true: null, false: null};
 let isCelsius = true;
 async function presentWeather(e = null)
 {
-    if(e)
-        e.preventDefault()
     try
     {
         const res = await getWeather(search.value);
@@ -31,19 +28,26 @@ async function presentWeather(e = null)
         img.src = ''
     }
 }
+function debounce(fnc, delay = 1500)
+{
+    return (...args)=> setTimeout(()=> fnc(...args), delay);
+}
 function calcTemp(num)
 {
     temp.true = ~~(num - 273.15) + '℃';
     temp.false = ~~((num - 273.15)*1.8)+32 + '℉';
-    console.log(temp)
 }
-form.addEventListener('submit', presentWeather);
+search.oninput = debounce(presentWeather);
 
-form.addEventListener('focusin', ()=>form.classList.add('scale'))
-form.addEventListener('focusout', ()=>form.classList.remove('scale'));
 swtch.addEventListener('change', ()=>{
     isCelsius = !swtch.checked;
     tempText.textContent = temp[isCelsius];
 });
-
+document.addEventListener('keydown',(e) =>
+{
+    if(e.key === 'Tab')
+        search.focus();
+    else if(e.key ==='Escape')
+        search.blur();
+})
 presentWeather();
