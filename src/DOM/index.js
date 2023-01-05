@@ -1,15 +1,15 @@
 import { getWeather} from "../logic/apiHandler";
 import './style.css'
+import loader from './assets/spinner.svg'
 
 const search = document.getElementById('search')
-const form = document.querySelector('form')
 const location = document.getElementById('location');
 const tempText = document.getElementById('tempText')
 const img = document.querySelector('img');
 const swtch = document.getElementById('switch');
-let temp = {true: null, false: null};
-let isCelsius = true;
-async function presentWeather(e = null)
+let temp = {true: null, false: null, isCelsius: true};
+
+async function presentWeather()
 {
     try
     {
@@ -18,7 +18,7 @@ async function presentWeather(e = null)
             throw res.message;
         location.textContent = res.sys.country + ', ' + res.name;
         calcTemp(res.main.temp);
-        tempText.textContent = temp[isCelsius];
+        tempText.textContent = temp[temp.isCelsius];
         img.src = `http://openweathermap.org/img/wn/${res.weather[0].icon}@2x.png`;
     }
     catch(error)
@@ -28,26 +28,30 @@ async function presentWeather(e = null)
         img.src = ''
     }
 }
-function debounce(fnc, delay = 1500)
-{
-    return (...args)=> setTimeout(()=> fnc(...args), delay);
+function debounce(fnc, delay = 1000)
+{ 
+    let timeout;
+    return (...args)=> {
+        clearTimeout(timeout);
+        location.textContent = 'Looking...';
+        tempText.textContent = '';
+        if(img.src !== loader)
+            img.src = loader;
+        timeout = setTimeout(()=> {fnc(...args)}, delay)
+    };
 }
 function calcTemp(num)
 {
     temp.true = ~~(num - 273.15) + '℃';
     temp.false = ~~((num - 273.15)*1.8)+32 + '℉';
 }
-search.oninput = debounce(presentWeather);
 
-swtch.addEventListener('change', ()=>{
-    isCelsius = !swtch.checked;
-    tempText.textContent = temp[isCelsius];
-});
+search.addEventListener('input',debounce(presentWeather));
+
+swtch.addEventListener('change', ()=>tempText.textContent = temp[temp.isCelsius = !swtch.checked]);
 document.addEventListener('keydown',(e) =>
 {
-    if(e.key === 'Tab')
-        search.focus();
-    else if(e.key ==='Escape')
+    if(e.key ==='Escape' || e.key === 'Enter')
         search.blur();
 })
 presentWeather();
